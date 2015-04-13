@@ -4,6 +4,8 @@ import org.apache.spark.SparkContext
 import play.api.mvc.Controller
 import play.api.mvc.Action
 import org.apache.spark.SparkConf
+import java.io.FileNotFoundException
+import scala.io.Source
 
 object Application extends Controller {
 
@@ -11,12 +13,28 @@ object Application extends Controller {
   val init = println("Hello")
 
   def index = Action {
-    println("action!")
-    val logFile = "/Users/sinisalouc/Documents/hashcode/ldap.rtf"
-    val sc = new SparkContext(conf)
-    val logData = sc.textFile(logFile, 2).cache()
-    val numSparks = logData.filter(line => line.contains("Spark")).count()
-    Ok(views.html.index("Lines with Spark: " + numSparks))
+    main
+    Ok(views.html.index())
+  }
+
+  def check(url: String) = {
+    try {
+      Source.fromURL(url)
+    } catch {
+      case e: FileNotFoundException => println(url)
+      case _: Throwable =>
+    }
+  }
+
+  def main() = {
+
+    val lines = Source.fromURL("https://github.com/onevcat/Kingfisher").getLines
+
+    val hrefLines = lines.flatMap(line => line.split("href=\""))
+    val httpLines = hrefLines.filter(line => line.startsWith("http"))
+    val links = httpLines.map(line => line.split("\"")(0))
+
+    links.foreach(check _)
   }
 
 }
