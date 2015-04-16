@@ -1,2 +1,2 @@
-# broken-links
-Quickly check your site for broken links!
+# Broken links finder
+Quickly check a website for broken links!
