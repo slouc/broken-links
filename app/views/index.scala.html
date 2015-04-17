@@ -2,11 +2,21 @@
 <html>
   <head>
     <title>Broken link finder</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
   </head>
-  <body>
-    <form method="post" autocomplete="on">
-      Enter URL:<input type="text" name="url"><br>
-      <input type="submit">
-    </form>
+  <body>  
+	<div class="container">
+	  <h1>Broken link finder</h1>
+	  <form role="form" method="post">
+	    <div class="form-group">
+	      <label for="url">Enter URL:</label>
+	      <input type="text" class="form-control" id="url" name="url">
+	    </div>
+	  </form>
+	</div>  
   </body>
 </html>

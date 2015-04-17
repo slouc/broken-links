@@ -23,8 +23,6 @@ object Checker {
     val hrefLines = lines.flatMap(line => line.split("href=\""))
     val httpLines = hrefLines.filter(line => line.startsWith("http"))
     val links = httpLines.map(line => line.split("\"")(0)).toSet
- 
-    println("Got " + links.size + " links.") 
     
     links.filter(check _).toSet
   }
