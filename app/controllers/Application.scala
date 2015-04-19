@@ -23,7 +23,8 @@ object Application extends Controller {
   def submit = Action { implicit request =>
     val url = form.bindFromRequest.get
     val links = Checker.getBrokenLinks(url)
-    Ok("RESULTS:\n\n" + links.mkString("\n"))
+    
+    Ok("Results:\n\n" + links.mkString("\n"))
   }
 
 }
