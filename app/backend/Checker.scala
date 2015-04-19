@@ -18,6 +18,16 @@ object Checker {
     Source.fromInputStream(inputStream)
   }
 
+  private def check(url: String): Boolean = {
+    val res: Boolean = try {
+      open(url)
+      false
+    } catch {
+      case e: Exception => true
+    }
+    res
+  }
+
   private def check(url: String, map: mutable.Map[String, Exception]): Boolean = {
     val res: Boolean = try {
       open(url)
@@ -31,19 +41,23 @@ object Checker {
     res
   }
 
-  def getBrokenLinks(url: String): Set[String] = {
-
+  def getLinks(url: String): Set[String] = {
     val lines = Source.fromURL(url).getLines
     val hrefLines = lines.flatMap(line => line.split("href=\""))
     val httpLines = hrefLines.filter(line => line.startsWith("http"))
-    val links = httpLines.map(line => line.split("\"")(0)).toSet
-
-    println("Got " + links.size + " links.")
-
-    val map = mutable.Map[String, Exception]()
-
-    val filtered = links.filter(check(_, map))
-    filtered.map(link => link + "\n" + map(link).getLocalizedMessage() + "\n")
-    
+    httpLines.map(line => line.split("\"")(0)).toSet
   }
+
+  def getBrokenLinks(url: String): Set[String] = {
+    val links = getLinks(url)
+    links.filter(check _)
+  }
+
+  def getBrokenLinksDetailed(url: String): Set[String] = {
+    val links = getLinks(url)
+    val map = mutable.Map[String, Exception]()
+    val brokenLinks = links.filter(check(_, map))
+    brokenLinks.map(link => link + "\n" + map(link).getMessage() + "\n")
+  }
+  
 }
