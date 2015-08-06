@@ -1,23 +1,15 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Broken link finder</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-  </head>
-  <body>  
-	<div class="container">
-	  <h1>Broken link finder</h1>
-	  <p>[work in progress]</p>
-	  <form role="form" method="post">
-	    <div class="form-group">
-	      <label for="url">Enter URL:</label>
-	      <input type="text" class="form-control" id="url" name="url">
-	    </div>
-	  </form>
-	</div>  
-  </body>
-</html>
+@(urlForm: Form[String], output: Option[List[String]] = None)
+
+@import helper.{form, inputText}
+
+@main("Broken links finder") {
+	
+<div class="container">
+	@form(action = routes.Application.submit()) {
+		<div class="form-group box">
+			@inputText(field = urlForm("url"), '_label -> "Enter URL:", 'class -> "form-control", '_help -> "")
+		</div>
+	}
+</div>
+	
+}

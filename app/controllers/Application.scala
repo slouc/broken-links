@@ -14,22 +14,19 @@ object Application extends Controller {
   //  val conf = new SparkConf().setAppName("playtest").setMaster("local")
 
   def index = Action {
-    Ok(views.html.index())
+    Ok(views.html.index(form))
   }
 
-  val form = Form(
-    "url" -> text)
+  val form = Form("url" -> text)
 
   def submit = Action { implicit request =>
     val url = form.bindFromRequest.get
-    Ok("Results:\n\n" +
-      Checker.getBrokenLinks(url).mkString("\n"))
+    Ok("Results:\n\n" + Checker.getBrokenLinks(url).mkString("\n"))
   }
 
   def submitDetails = Action { implicit request =>
     val url = form.bindFromRequest.get
-    Ok("Results:\n\n" +
-      Checker.getBrokenLinks(url, true).mkString("\n"))
+    Ok("Results:\n\n" + Checker.getBrokenLinks(url, true).mkString("\n"))
   }
 
 }

@@ -4,6 +4,7 @@ import java.io.FileNotFoundException
 import scala.io.Source
 import java.net.URL
 import scala.collection._
+import scala.io.Codec
 
 object Checker {
 
@@ -30,7 +31,8 @@ object Checker {
   }
 
   def getLinks(url: String): Set[String] = {
-    val lines = Source.fromURL(url).getLines
+    implicit val codec = Codec("UTF-8")
+    val lines = Source.fromURL(url, "utf-8").getLines
     val hrefLines = lines.flatMap(line => line.split("href=\""))
     val httpLines = hrefLines.filter(line => line.startsWith("http"))
     httpLines.map(line => line.split("\"")(0)).toSet
