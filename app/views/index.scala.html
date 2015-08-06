@@ -1,4 +1,4 @@
-@(urlForm: Form[String], output: Option[List[String]] = None)
+@(urlForm: Form[String], output: Option[Set[String]] = None)
 
 @import helper.{form, inputText}
 
@@ -9,6 +9,9 @@
 		<div class="form-group box">
 			@inputText(field = urlForm("url"), '_label -> "Enter URL:", 'class -> "form-control", '_help -> "")
 		</div>
+	}
+	@if(output.isDefined) {
+		@results(output.get)
 	}
 </div>
 	

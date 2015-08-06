@@ -1,0 +1,8 @@
+@(output: Set[String])
+
+<p><b>Results:</b></p>
+<ul>
+@for(item <- output) {
+	<li>@item</li>
+}
+</ul>

@@ -1,10 +1,11 @@
 package backend
 
-import java.io.FileNotFoundException
-import scala.io.Source
 import java.net.URL
-import scala.collection._
+
+import scala.annotation.migration
+import scala.collection.mutable
 import scala.io.Codec
+import scala.io.Source
 
 object Checker {
 

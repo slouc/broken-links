@@ -21,7 +21,8 @@ object Application extends Controller {
 
   def submit = Action { implicit request =>
     val url = form.bindFromRequest.get
-    Ok("Results:\n\n" + Checker.getBrokenLinks(url).mkString("\n"))
+    val results = Checker.getBrokenLinks(url)
+    Ok(views.html.index(form, Some(results)))
   }
 
   def submitDetails = Action { implicit request =>
