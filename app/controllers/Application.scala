@@ -9,25 +9,26 @@ import play.api.mvc.Action
 import play.api.mvc.Controller
 import backend.Checker
 
+case class UrlForm(url: String, checkbox: Option[String])
+
 object Application extends Controller {
 
   //  val conf = new SparkConf().setAppName("playtest").setMaster("local")
+
+  val form = Form(mapping(
+    "url" -> nonEmptyText,
+    "checkbox" -> optional(text))(UrlForm.apply)(UrlForm.unapply))
 
   def index = Action {
     Ok(views.html.index(form))
   }
 
-  val form = Form("url" -> text)
-
   def submit = Action { implicit request =>
-    val url = form.bindFromRequest.get
-    val results = Checker.getBrokenLinks(url)
+    val results = form.bindFromRequest.get match {
+      case UrlForm(url, Some("on")) => Checker.getBrokenLinks(url, true)
+      case UrlForm(url, None)    => Checker.getBrokenLinks(url, false)
+    }
     Ok(views.html.index(form, Some(results)))
-  }
-
-  def submitDetails = Action { implicit request =>
-    val url = form.bindFromRequest.get
-    Ok("Results:\n\n" + Checker.getBrokenLinks(url, true).mkString("\n"))
   }
 
 }
