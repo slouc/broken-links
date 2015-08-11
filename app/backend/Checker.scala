@@ -18,13 +18,13 @@ object Checker {
     Source.fromInputStream(inputStream)
   }
 
-  private def check(url: String, map: mutable.Map[String, Exception] = null): Boolean = {
+  private def check(url: String, map: Option[mutable.Map[String, Exception]] = None): Boolean = {
     val res: Boolean = try {
       open(url)
       false
     } catch {
       case e: Exception => {
-        if (map != null) map += url -> e
+        if (map.isDefined) map.get += url -> e
         true
       }
     }
@@ -46,8 +46,8 @@ object Checker {
     } else {
       val links = getLinks(url)
       val map = mutable.Map[String, Exception]()
-      val brokenLinks = links.filter(check(_, map))
-      brokenLinks.map(link => link + "\n" + map(link).getMessage() + "\n")
+      val brokenLinks = links.filter(check(_, Some(map)))
+      brokenLinks.map(link => link + " ; " + map(link).getMessage() + "\n")
     }
   }
 
