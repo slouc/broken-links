@@ -7,6 +7,6 @@ TODO:
 - UI for switching to detailed view, displaying causes properly
 - proper showing of 404 cause in detailed view
 - handling redirection, certificates and hrefs without specified protocol
-- handling charsets (error [MalformedInputException: Input length = 1])
+- handling charsets (error [MalformedInputException: Input length = 1])(e.g. http://www.vodafone.it/portal/Aziende)
 - parallelization of links searching and validation (with option to turn it on/off)
 

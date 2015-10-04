@@ -1,8 +1,8 @@
 package backend
 
 import java.net.URL
+import java.nio.charset.CodingErrorAction
 
-import scala.annotation.migration
 import scala.collection.mutable
 import scala.io.Codec
 import scala.io.Source
@@ -33,7 +33,8 @@ object Checker {
 
   def getLinks(url: String): Set[String] = {
     implicit val codec = Codec("UTF-8")
-    val lines = Source.fromURL(url, "utf-8").getLines
+    
+    val lines = Source.fromURL(url).getLines
     val hrefLines = lines.flatMap(line => line.split("href=\""))
     val httpLines = hrefLines.filter(line => line.startsWith("http"))
     httpLines.map(line => line.split("\"")(0)).toSet
