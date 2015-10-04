@@ -11,7 +11,6 @@ libraryDependencies ++= Seq(
   anorm,
   cache,
   ws,
- "org.apache.spark" %% "spark-core" % "1.2.0",
  "com.typesafe.akka" %% "akka-actor" % "2.2.3",
  "com.typesafe.akka" %% "akka-slf4j" % "2.2.3"
 )
