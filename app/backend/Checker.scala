@@ -43,12 +43,18 @@ object Checker {
   def getBrokenLinks(url: String, useDetails: Boolean = false): Set[String] = {
     if (!useDetails) {
       val links = getLinks(url)
-      links.filter(check(_))
+      links.filter(check(_)) match {
+        case links if links.isEmpty => Set("No results found!")
+        case links => links
+      }
     } else {
       val links = getLinks(url)
-      val map = mutable.Map[String, Exception]()
-      val brokenLinks = links.filter(check(_, Some(map)))
-      brokenLinks.map(link => link + " ; " + map(link).getMessage() + "\n")
+      val excMap = mutable.Map[String, Exception]()
+      val brokenLinks = links.filter(check(_, Some(excMap)))
+      brokenLinks match {
+        case links if links.isEmpty => Set("No results found!")
+        case _ => brokenLinks.map(link => link + " ; " + excMap(link).getMessage() + "\n")
+      }
     }
   }
 
