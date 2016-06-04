@@ -2,10 +2,15 @@ package backend
 
 import java.net.URL
 
+import org.apache.spark.{SparkConf, SparkContext}
+
 import scala.collection.mutable
 import scala.io.{Codec, Source}
 
 object Checker {
+
+  val conf = new SparkConf().setAppName("broken-links").setMaster("local")
+  val sc = new SparkContext(conf)
 
   def getBrokenLinks(url: String, details: Boolean = false): Set[String] = {
 
@@ -27,7 +32,9 @@ object Checker {
     val lines = Source.fromURL(url).getLines
     val hrefLines = lines.flatMap(line => line.split("href=\""))
     val httpLines = hrefLines.filter(line => line.startsWith("http"))
-    httpLines.map(line => line.split("\"")(0)).toSet
+
+    val result = sc.parallelize(httpLines.toSeq).map(line => line.split("\"")(0))
+    result.collect().toSet
   }
 
   private def open(url: String, timeout: Int = 5000) = {
