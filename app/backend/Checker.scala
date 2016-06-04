@@ -1,13 +1,34 @@
 package backend
 
 import java.net.URL
-import java.nio.charset.CodingErrorAction
 
 import scala.collection.mutable
-import scala.io.Codec
-import scala.io.Source
+import scala.io.{Codec, Source}
 
 object Checker {
+
+  def getBrokenLinks(url: String, details: Boolean = false): Set[String] = {
+
+    val links = getLinks(url)
+    val exceptionsMap = if (details) Some(mutable.Map[String, Exception]()) else None
+    val brokenLinks = links.filter(check(_, exceptionsMap))
+
+    brokenLinks match {
+      case links if links.isEmpty => Set(NoResultsFound)
+      case links =>
+        if (details) brokenLinks.map(link => link + " ; " + exceptionsMap.get(link).getMessage() + "\n")
+        else links
+    }
+  }
+
+  private def getLinks(url: String): Set[String] = {
+    implicit val codec = Codec("UTF-8")
+
+    val lines = Source.fromURL(url).getLines
+    val hrefLines = lines.flatMap(line => line.split("href=\""))
+    val httpLines = hrefLines.filter(line => line.startsWith("http"))
+    httpLines.map(line => line.split("\"")(0)).toSet
+  }
 
   private def open(url: String, timeout: Int = 5000) = {
     val conn = (new URL(url)).openConnection()
@@ -19,7 +40,7 @@ object Checker {
   }
 
   private def check(url: String, map: Option[mutable.Map[String, Exception]] = None): Boolean = {
-    val res: Boolean = try {
+    try {
       open(url)
       false
     } catch {
@@ -28,34 +49,8 @@ object Checker {
         true
       }
     }
-    res
   }
 
-  def getLinks(url: String): Set[String] = {
-    implicit val codec = Codec("UTF-8")
-    
-    val lines = Source.fromURL(url).getLines
-    val hrefLines = lines.flatMap(line => line.split("href=\""))
-    val httpLines = hrefLines.filter(line => line.startsWith("http"))
-    httpLines.map(line => line.split("\"")(0)).toSet
-  }
-
-  def getBrokenLinks(url: String, useDetails: Boolean = false): Set[String] = {
-    if (!useDetails) {
-      val links = getLinks(url)
-      links.filter(check(_)) match {
-        case links if links.isEmpty => Set("No results found!")
-        case links => links
-      }
-    } else {
-      val links = getLinks(url)
-      val excMap = mutable.Map[String, Exception]()
-      val brokenLinks = links.filter(check(_, Some(excMap)))
-      brokenLinks match {
-        case links if links.isEmpty => Set("No results found!")
-        case _ => brokenLinks.map(link => link + " ; " + excMap(link).getMessage() + "\n")
-      }
-    }
-  }
+  val NoResultsFound = "No results found!"
 
 }

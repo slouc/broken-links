@@ -24,7 +24,7 @@ object Application extends Controller {
   def submit = Action { implicit request =>
     val results = form.bindFromRequest.get match {
       case UrlForm(url, Some("on")) => Checker.getBrokenLinks(url, true)
-      case UrlForm(url, None)    => Checker.getBrokenLinks(url, false)
+      case UrlForm(url, None)       => Checker.getBrokenLinks(url, false)
     }
     Ok(views.html.index(form, Some(results)))
   }
