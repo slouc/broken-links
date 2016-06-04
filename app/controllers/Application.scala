@@ -1,6 +1,7 @@
 package controllers
 
 import backend.Checker
+import org.apache.spark.{SparkConf, SparkContext}
 import play.api.data.Form
 import play.api.data.Forms.mapping
 import play.api.data.Forms.nonEmptyText

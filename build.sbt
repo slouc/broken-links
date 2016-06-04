@@ -4,7 +4,7 @@ version := "1.0-SNAPSHOT"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
-scalaVersion := "2.11.8"
+scalaVersion := "2.10.6"
 
 libraryDependencies ++= Seq(
   jdbc,
@@ -12,6 +12,6 @@ libraryDependencies ++= Seq(
   cache,
   ws,
   "com.typesafe.akka" %% "akka-actor" % "2.2.3",
-  "com.typesafe.akka" %% "akka-slf4j" % "2.2.3",
-  "org.apache.spark" %% "spark-core" % "1.6.1"
+  "org.apache.spark" %% "spark-core" % "1.6.1",
+  "org.apache.spark" %% "spark-streaming" % "1.6.1"
 )
