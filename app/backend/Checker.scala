@@ -22,7 +22,7 @@ object Checker {
     brokenLinks match {
       case links if links.isEmpty => Set(NoResultsFound)
       case links =>
-        if (details) brokenLinks.map(link => link + " ; " + "TODO: REASON" + "\n")
+        if (details) brokenLinks.map(link => link + " ; " + getReason(link) + "\n")
         else links
     }
   }
@@ -53,6 +53,17 @@ object Checker {
       false
     } catch {
       case e: Exception => true
+    }
+  }
+
+  private def getReason(url: String): String = {
+    try {
+      open(url)
+      ""
+    } catch {
+      case e: Exception => {
+        e.getMessage
+      }
     }
   }
 
