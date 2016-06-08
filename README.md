@@ -1,12 +1,13 @@
 # Broken links finder
-Quickly check a website for broken links!
+Quickly check a website for broken links! To start it up, simply do:
 
-[work in progress]
+    > activator run
+    
+for default port 9000, or
 
-TODO:
-- UI for switching to detailed view, displaying causes properly
-- proper showing of 404 cause in detailed view
-- handling redirection, certificates and hrefs without specified protocol
-- handling charsets (error [MalformedInputException: Input length = 1])(e.g. http://www.vodafone.it/portal/Aziende)
-- parallelization of links searching and validation (with option to turn it on/off)
+    > activator "run [PORT]"
+    
+for a custom one.
+
+Note that this is very much *[work in progress]*. Next step is parallelization using Spark for speedup (code is already inside, just need to set up a cluster).
 
