@@ -9,5 +9,5 @@ for default port 9000, or
     
 for a custom one.
 
-Note that this is very much *[work in progress]*. Next step is parallelization using Spark for speedup (code is already inside, just need to set up a cluster).
+Note that this is very much work in progress. Next step is parallelization using Spark for speedup (code is already inside, just need to set up a cluster).
 
