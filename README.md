@@ -1,11 +1,11 @@
 # Broken links finder
 Quickly check a website for broken links! To start it up, simply do:
 
-    > activator run
+    ./activator run
     
 for default port 9000, or
 
-    > activator "run [PORT]"
+    ./activator "run [PORT]"
     
 for a custom one.
 
