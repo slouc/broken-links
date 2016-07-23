@@ -14,16 +14,20 @@ object Checker {
   val conf = new SparkConf().setAppName("broken-links").setMaster("local")
   val sc = new SparkContext(conf)
 
+  val timeout = 5000
+
   def getBrokenLinks(url: String, details: Boolean = false): Set[String] = {
 
     val links = getLinks(url)
-    val brokenLinks = links.filter(check(_)).collect().toSet
+    val brokenLinks = links.flatMap(getBrokenLinkInfo).collect().toSet
 
     brokenLinks match {
       case links if links.isEmpty => Set(NoResultsFound)
       case links =>
-        if (details) brokenLinks.map(link => link + " ; " + getReason(link) + "\n")
-        else links
+        if (details) links.map {
+          case (brokenUrl, msg) => s"$brokenUrl; $msg\n"
+        }
+        else links.map(_._1) // just url
     }
   }
 
@@ -38,32 +42,17 @@ object Checker {
 
   }
 
-  private def open(url: String, timeout: Int = 5000) = {
-    val conn = (new URL(url)).openConnection()
-    conn.setConnectTimeout(timeout)
-    conn.setReadTimeout(timeout)
+  private def getBrokenLinkInfo(url: String): Option[(String, String)] = {
 
-    val inputStream = conn.getInputStream()
-    Source.fromInputStream(inputStream)
-  }
-
-  private def check(url: String): Boolean = {
     try {
-      open(url)
-      false
+      val conn = (new URL(url)).openConnection()
+      conn.setConnectTimeout(timeout)
+      conn.setReadTimeout(timeout)
+      val inputStream = conn.getInputStream()
+      Source.fromInputStream(inputStream)
+      None
     } catch {
-      case e: Exception => true
-    }
-  }
-
-  private def getReason(url: String): String = {
-    try {
-      open(url)
-      ""
-    } catch {
-      case e: Exception => {
-        e.getMessage
-      }
+      case e: Exception => Option((url, e.getMessage))
     }
   }
 
