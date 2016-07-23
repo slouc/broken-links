@@ -22,12 +22,9 @@ object Checker {
     val brokenLinks = links.flatMap(getBrokenLinkInfo).collect().toSet
 
     brokenLinks match {
-      case links if links.isEmpty => Set(NoResultsFound)
-      case links =>
-        if (details) links.map {
-          case (brokenUrl, msg) => s"$brokenUrl; $msg\n"
-        }
-        else links.map(_._1) // just url
+      case bl if bl.isEmpty => Set(NoResultsFound)
+      case bl if (details) => bl.map(link => link._1 + "; " + link._2 + "\n")
+      case bl => bl.map(_._1)
     }
   }
 
