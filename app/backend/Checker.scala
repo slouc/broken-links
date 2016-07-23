@@ -2,19 +2,17 @@ package backend
 
 import java.net.URL
 
-import controllers.Application
-import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.rdd.RDD
+import org.apache.spark.{SparkConf, SparkContext}
 
-import scala.collection.mutable
 import scala.io.{Codec, Source}
 
 object Checker {
 
+  val NoResultsFound = "No results found!"
+  val timeout = 5000
   val conf = new SparkConf().setAppName("broken-links").setMaster("local")
   val sc = new SparkContext(conf)
-
-  val timeout = 5000
 
   def getBrokenLinks(url: String, details: Boolean = false): Set[String] = {
 
@@ -29,6 +27,7 @@ object Checker {
   }
 
   private def getLinks(url: String): RDD[String] = {
+
     implicit val codec = Codec("UTF-8")
 
     val lines = Source.fromURL(url).getLines
@@ -36,7 +35,6 @@ object Checker {
     val httpLines = hrefLines.filter(line => line.startsWith("http"))
 
     httpLines.map(line => line.split("\"")(0))
-
   }
 
   private def getBrokenLinkInfo(url: String): Option[(String, String)] = {
@@ -52,7 +50,5 @@ object Checker {
       case e: Exception => Option((url, e.getMessage))
     }
   }
-
-  val NoResultsFound = "No results found!"
 
 }

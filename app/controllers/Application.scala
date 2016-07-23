@@ -1,14 +1,9 @@
 package controllers
 
 import backend.Checker
-import org.apache.spark.{SparkConf, SparkContext}
 import play.api.data.Form
-import play.api.data.Forms.mapping
-import play.api.data.Forms.nonEmptyText
-import play.api.data.Forms.optional
-import play.api.data.Forms.text
-import play.api.mvc.Action
-import play.api.mvc.Controller
+import play.api.data.Forms.{mapping, nonEmptyText, optional, text}
+import play.api.mvc.{Action, Controller}
 
 case class UrlForm(url: String, checkbox: Option[String])
 
