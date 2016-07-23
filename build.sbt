@@ -12,6 +12,5 @@ libraryDependencies ++= Seq(
   cache,
   ws,
   "com.typesafe.akka" %% "akka-actor" % "2.2.3",
-  "org.apache.spark" %% "spark-core" % "1.6.1",
-  "org.apache.spark" %% "spark-streaming" % "1.6.1"
+  "org.apache.spark" %% "spark-core" % "1.2.0"
 )
