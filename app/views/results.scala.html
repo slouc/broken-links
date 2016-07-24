@@ -1,8 +1,9 @@
 @(output: Set[String])
 
 <p><b>Results:</b></p>
-<ul>
-@for(item <- output) {
-	<li>@item</li>
-}
+
+<ul class="list-group">
+	@for(item <- output) {
+	<li class="list-group-item">@item</li>
+	}
 </ul>

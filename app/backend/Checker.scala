@@ -21,7 +21,7 @@ object Checker {
 
     brokenLinks match {
       case bl if bl.isEmpty => Set(NoResultsFound)
-      case bl if (details) => bl.map(link => link._1 + "; " + link._2 + "\n")
+      case bl if (details) => bl.map(link => link._1 + "  [" + link._2 + "]")
       case bl => bl.map(_._1)
     }
   }
