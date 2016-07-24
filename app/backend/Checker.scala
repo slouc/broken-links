@@ -14,15 +14,15 @@ object Checker {
   val conf = new SparkConf().setAppName("broken-links").setMaster("local")
   val sc = new SparkContext(conf)
 
-  def getBrokenLinks(url: String, details: Boolean = false): Set[String] = {
+  def getBrokenLinks(url: String, details: Boolean = false): Set[(String, Option[String])] = {
 
     val links = getLinks(url)
     val brokenLinks = links.flatMap(getBrokenLinkInfo).collect().toSet
 
     brokenLinks match {
-      case bl if bl.isEmpty => Set(NoResultsFound)
-      case bl if (details) => bl.map(link => link._1 + "  [" + link._2 + "]")
-      case bl => bl.map(_._1)
+      case bl if bl.isEmpty => Set((NoResultsFound, None))
+      case bl if (!details) => bl.map(link => (link._1, None))
+      case bl =>  bl.map(link => (link._1, Option(link._2)))
     }
   }
 

@@ -1,9 +1,16 @@
-@(output: Set[String])
+@(output: Set[(String, Option[String])])
 
 <p><b>Results:</b></p>
 
 <ul class="list-group">
-	@for(item <- output) {
-	<li class="list-group-item">@item</li>
-	}
+    @for(item <- output) {
+    <li class="list-group-item">
+        <div>
+            @(item._1)
+            @if(item._2.isDefined) {
+                <p class="text-danger">@(item._2.get)</p>
+            }
+        </div>
+    </li>
+    }
 </ul>
